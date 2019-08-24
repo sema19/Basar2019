@@ -1,0 +1,76 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}
+	Kasse
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}            
+    <link href="{{ url_for('static', filename='css/kasse.css') }}" rel="stylesheet">
+    <!--  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"> -->
+    <script charset="utf-8"></script>        
+    <script type="text/javascript">
+    	{% include "js/kasse.js" %}        
+        
+    $(document).ready(function(){
+	});       
+    </script> 
+{% endblock %}
+
+
+
+{% block content %}
+	<div class="container-fluid">
+		<div class="row">
+			<h1>Grundschule Teugn Basar 2019</h1>
+		</div>
+		<div class="row">					
+			<div id="article" class="col-xl-7"  style="background-color:yellow">
+				<div id="message" class="row">			
+					<label id="errMsgId">Willkommen</label>
+				</div>
+				<div class="row">								 							
+					<div id="inputarea" class="col-md-6">
+						<input type="text" id="eingabeId" name="eingabe" ></input>						
+					</div>					
+					<div id="sum" class="col-md-6">
+						<div class="row">
+							<div id="sum" class="col-sm-5">
+								<label id="sumtxt">SUMME:</label>
+							</div>
+							<div id="sum" class="col-sm-5">
+								<label id="sumId">0.00€</label>
+							</div>
+						</div>							
+					</div>
+				</div>											
+				<div id="cart" class="row">
+					<table id="cartTableId" class="table table-bordered table-striped">
+						<thead>
+							<tr><th>Pos</th><th>Barcode</th><th>Text</th><th>Preis</th></tr>
+						<thead>
+						<tbody>
+						</tbody>
+					</table>					
+				</div>
+			</div>	
+			<div id="control" class="col-xl-3" style="background-color:purple">
+				<div class="container">
+					<div class="row">
+					<button id="btnRefresh" class="btn btn-lg btn-block">Ansicht erneuern</button><br>
+					<button id="btnDelCart" class="btn btn-lg btn-block">Lösche Warenkorb</button><br>
+					<button id="btnDelLast" class="btn btn-lg btn-block">Lösche letzten Artikel</button><br>
+					<button id="btnCheckout" class="btn btn-lg btn-block">Bezahlen</button><br>
+					</div>		
+				</div>
+			</div>
+			<div id="control" class="col-xl-2" style="background-color:cyan">
+				<div class="container">
+					<div class="row">
+					<button id="btnCart1" class="btn btn-lg btn-block">CART 1</button><br>
+					<button id="btnCart2" class="btn btn-lg btn-block">CART 2</button><br>					
+					</div>		
+				</div>
+			</div>	
+		</div>
+	</div>
+{% endblock %}

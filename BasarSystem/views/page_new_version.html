@@ -1,0 +1,535 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}New Software Version{% endblock %}
+
+{% block header %}
+	{{ super() }}
+	<!-- <link rel="shortcut icon" href="{{ url_for('static', filename='img/favico.png') }}"></link> -->
+	<style type="text/css">
+		{% include "css/bootstrap-treeview.min.css" %}		
+		{% include "css/addons/datatables.min.css" %}						
+	</style>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}            
+    <script charset="utf-8"></script>
+        
+    <script type="text/javascript">
+        {% include "js/bootstrap-treeview.min.js" %}
+        {% include "js/addons/datatables.min.js" %}
+        
+    </script> 
+    
+    <script>
+    function encode_utf8(s) {
+    	  return unescape(encodeURIComponent(s));
+   	}
+
+   	function decode_utf8(s) {
+   	  return decodeURIComponent(escape(s));
+   	}
+   	
+   	var nodeSel=null;
+   	
+   	/*
+   	var myTree = [
+    {
+      text: "Item 1",
+      nodes: [
+        {
+          text: "Item 1-1",
+          nodes: [
+            {
+              text: "Item 1-1-1"
+            },
+            {
+              text: "Item 1-1-2"
+            }
+          ]
+        },
+        {
+          text: "Item 1-2"
+        }
+      ]
+    },
+    {
+      text: "Item 2"
+    },
+    {
+      text: "Item 3"
+    }
+	];
+   			
+   	
+   	var mytreeObj = $('#testplan-tree').treeview({
+
+    	  // expanded to 2 levels
+    	  levels: 2,
+
+    	  // custom icons
+    	  expandIcon: 'glyphicon glyphicon-plus',
+    	  collapseIcon: 'glyphicon glyphicon-minus',
+    	  emptyIcon: 'glyphicon',
+    	  nodeIcon: '',
+    	  selectedIcon: '',
+    	  checkedIcon: 'glyphicon glyphicon-check',
+    	  uncheckedIcon: 'glyphicon glyphicon-unchecked',
+
+    	  // colors
+    	  color: undefined, // '#000000',
+    	  backColor: undefined, // '#FFFFFF',
+    	  borderColor: undefined, // '#dddddd',
+    	  onhoverColor: '#F5F5F5',
+    	  selectedColor: '#FFFFFF',
+    	  selectedBackColor: '#428bca',
+    	  searchResultColor: '#D9534F',
+    	  searchResultBackColor: undefined, //'#FFFFFF',
+
+    	  // enables links
+    	  enableLinks: false,
+
+    	  // highlights selected items
+    	  highlightSelected: true,
+
+    	  // highlights search results
+    	  highlightSearchResults: true,
+
+    	  // shows borders
+    	  showBorder: true,
+
+    	  // shows icons
+    	  showIcon: true,
+
+    	  // shows checkboxes
+    	  showCheckbox: true,
+
+    	  // shows tags
+    	  showTags: false,
+
+    	  // enables multi select
+    	  multiSelect: false
+    });
+   	*/
+    
+
+    $(document).ready(function(){
+    	
+    	console.log("COMMIT TABLE");
+    	$("#committable").DataTable({"paging":true});
+    	$('.dataTables_length').addClass('bs-select');
+    	console.log("COMMIT TABLE DONE");
+    	
+    	console.log("FILL TREE");
+		//json_response = '{"text":"1","nodes":[{text":"1_2"},{"text":"1_3"}]}';
+		//response = JSON.parse(decode_utf8(JSON.stringify(json_response)));
+		/*
+		$('#testplan-tree').treeview({			
+    		data:myTree,
+    		onNodeSelected: function(event,node) {
+    			nodeSel=node
+    		  	console.log(node);
+    		}
+    	});
+		*/
+		
+		$('.event').on("dragstart", function (event) {
+			console.log("Dragstart");
+	        var dt = event.originalEvent.dataTransfer;
+	        dt.setData('Text', $(this).text());	//$(this).attr('id'));
+	    });
+	    $('table td').on("dragenter dragover drop", function (event) {
+	        event.preventDefault();
+	        if (event.type === 'drop') {
+	        	//$(event.originalEvent.target).val+=", "+event.originalEvent.dataTransfer.getData('Text', $(this).value);
+	        	console.log("Drop");
+	            var data = event.originalEvent.dataTransfer.getData('Text');	//, $(this).attr('id'));
+	            console.log(data);
+	            //console.log($(data));
+	            //console.log($("mydndritem1"));
+	            console.log($(event.originalEvent.target));
+	            var oldtxt=$(event.originalEvent.target).val();
+	            console.log(oldtxt);	            
+	            if (oldtxt.length>0){
+	            	oldtxt+=", ";
+	            }
+	            $(event.originalEvent.target).val(oldtxt+data);
+
+	            //de = $('#' + data).detach();
+	            //if (event.originalEvent.target.tagName === "SPAN") { 
+	            //    de.insertBefore($(event.originalEvent.target));
+	            //}
+	            //else {
+	            //     de.appendTo($(this));
+	            //}
+	        };
+	    });
+	    
+	    $('#btnOnChangeLogEntry').click(function(){
+	    	//alert("Add a change log line here")
+	    	
+	    	//var n = $('#tableChangeLog tbody tr', this).length;
+	    	line="";
+	    	line+="<tr>";
+			line+="<td>1</td>";
+			line+="<td><select class='form-control'>";				
+			line+="<option value='hidden'>hidden</option>";
+			line+="<option value='internal'>internal</option>";
+			line+="<option value='external'>external</option>";
+   			line+="</select></td>";
+   			line+="<td><select class='form-control'>";
+   			line+="<option value='Bugfix'>Bugfix</option>";
+   			line+="<option value='Feature'>Feature</option>";
+   			line+="<option value='Refactoring'>Refactoring</option>";
+   			line+="</select></td>";
+   			line+="<td><textarea class='form-control' rows='1' ></textarea></td>";
+   			line+="<td><input type='range' min='0' max='100' value='25'/></td>";
+   			line+="<td><input type='text'' ></input></td>";
+   			line+="<td><input type='text'' ></input></td>";
+   			line+="<td><input type='text'' ></input></td>";
+   			line+="<td><button type='button' class='btn btn-danger'>X</button></td>";
+   			line+="</tr>"
+   			
+	    	
+	    	$('#tableChangeLog tbody').prepend(line);
+	    	//$('#tableChangeLog').update();
+	    });
+	    
+	    
+	});
+    
+    function selectDefects(id)
+    {
+    	console.log("SELECT DEFECTS for id")
+    	
+    }
+    
+    
+    
+    
+        
+    </script> 
+{% endblock %}
+
+{% block styles %}
+	{{ super() }}	
+		
+	
+{% endblock %}
+
+{% block navbar %}
+	{{ super() }}
+	<nav class="navbar navbar-inverse navbar-static-top">
+		<div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">{{ product.productname }}</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Release</a></li>
+      <li><a href="#">Related Products</a></li>
+      <li><a href="#">Notifications</a></li>
+      <li><a href="#">Settings</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#"><span class="glyphicon glyphicon-user"></span> User</a></li>
+      <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+    </ul>
+  </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+	{{ super() }}
+	<div>
+		<div class="container" id="softwareselection">
+			<div class="row">
+				{% if prevrelease!=None %}
+				<label>Previous Version: {{ prevrelease.version }}</label>
+				<label>released on: {{ prevrelease.finalizedon.strftime('%a %d %b %C') }}</label>
+				<br>
+				{% endif %}				
+				<label>New Version:</label>
+				<input class="text" value="{{ product.version }}">
+				<div class="form-group">  			
+					<select class="form-control" id="sel1">
+ 						<option>Release for Test</option>
+ 						<option>Release for Internal Use</option>
+ 						<option>Release for Customer</option>    					
+					</select>
+				</div> 				
+			</div>		
+		</div>
+		<div class="container" id="relatedproducts">	
+			<div class="row" style="background:lightblue;">					
+				<h4>Related Products</h4>				
+			</div>
+			<div class="row">
+				<table class="table">
+	    			<thead>
+	      				<tr>        				
+	        				<th>Software</th>
+	        				<th>Version</th>
+	        				<th>Relation</th>        				
+	      				</tr>
+	    			</thead>
+	    			<tbody>
+	    			{% if relatedsw!=None %}
+		    			{% for key in relatedsw %}
+		    			<tr>
+		    				<td>{{ relatedsw[key].name }}</td>
+		    				<td>{{ relatedsw[key].version }}</td>
+		    				<td>{{ relatedsw[key].relationtype }}</td>
+		    			</tr>
+		    			{% endfor %}
+	    			{% endif %}
+	    			</tbody>
+	  			</table> 
+			</div>
+		</div>
+		<div class ="container mt-3">
+			<ul class="nav nav-tabs" style="background:lightblue;">
+				<li class="nav-item">
+					<a class="nav-link active" data-toggle="tab" href="#commits">Commits</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link active" data-toggle="tab" href="#defects">Defects</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link active" data-toggle="tab" href="#features">Features</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link active" data-toggle="tab" href="#tests">Tests</a>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div class="container tab-pane active" id="commits">	
+					<div class="row">
+						<table id="committable" class="table table-striped table-bordered table-lg" cellspacing="0" width="100%">
+			    			<thead>
+			      				<tr>        				
+			        				<th>ID</th>
+			        				<th>Timestamp</th>  
+			        				<th>Author</th>      				
+			        				<!--  <th>File</th> -->
+			        				<th>Description</th>
+			      				</tr>
+			    			</thead>
+			    			<tbody>
+			    			{% if commits!=None %}
+				    			{% for key in commits %}
+				    			<tr>
+				    				<td><span class="event" id="mydndritem1" draggable="true">{{ commits[key].id }}</span></td>
+				    				<td>{{ commits[key].timestamp.strftime('%a %d %b %y') }}</td>
+				    				<td>{{ commits[key].author }}</td>
+				    				<!-- <td>{{ commits[key].sourcefiles }}</td> -->
+				    				<td>{{ commits[key].comment }}</td>		    				
+				    			</tr>
+				    			{% endfor %}
+			    			{% endif %}
+			    			</tbody>
+			  			</table> 
+					</div> 
+				</div>
+				<div class="container tab-pane fade" id="defects">	
+					<div class="row">
+						<table class="table">
+			    			<thead>
+			      				<tr>        				
+			        				<th>ID</th>
+			        				<th>Status</th>
+			        				<th>Updated</th>  
+			        				<th>Author</th>      				
+			        				<th>Priority</th>
+			        				<th>subject</th>
+			      				</tr>
+			    			</thead>
+			    			<tbody>
+			    			{% if defects!=None %}
+				    			{% for key in defects %}
+				    			<tr>
+				    				<td><span class="event" id="mydndritem2" draggable="true">{{ defects[key].id }}</span></td>
+				    				<td>{{ defects[key].status }}</td>
+				    				<td>{{ defects[key].updated_on.strftime('%a %d %b %y') }}</td>
+				    				<td>{{ defects[key].author }}</td>
+				    				<td>{{ defects[key].priority }}</td>
+				    				<td>{{ defects[key].subject }}</td>		    				
+				    			</tr>
+				    			{% endfor %}
+			    			{% endif %}
+			    			</tbody>
+			  			</table> 
+					</div>
+				</div>	
+				<div class="container tab-pane fade" id="features">	
+					<div class="row">
+						<table class="table">
+			    			<thead>
+			      				<tr>        				
+			        				<th>ID</th>
+			        				<th>Status</th>
+			        				<th>Updated</th>  
+			        				<th>Author</th>      				
+			        				<th>Priority</th>
+			        				<th>subject</th>
+			      				</tr>
+			    			</thead>
+			    			<tbody>
+			    			{% if features!=None %}
+				    			{% for key in features %}
+				    			<tr>
+				    				<td><span class="event" id="mydndritem2" draggable="true">{{ features[key].id }}</span></td>
+				    				<td>{{ features[key].status }}</td>
+				    				<td>{{ features[key].updated_on.strftime('%a %d %b %y') }}</td>
+				    				<td>{{ features[key].author }}</td>
+				    				<td>{{ features[key].priority }}</td>
+				    				<td>{{ features[key].subject }}</td>		    				
+				    			</tr>
+				    			{% endfor %}
+			    			{% endif %}
+			    			</tbody>
+			  			</table> 
+					</div>
+				</div>
+				<div class="container tab-pane fade" id="tests">	
+					<div class="row">
+						<table class="table">
+			    			<thead>
+			      				<tr>        				
+			        				<th>ID</th>
+			        				<th>Description</th>			        				
+			      				</tr>
+			    			</thead>
+			    			<tbody>			    			
+			    			</tbody>
+			  			</table> 
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container" id="changelog">
+			<div class="row" style="background:lightblue;">
+				<div class="col-md-2">
+					<h4>Change Log</h4>
+				</div>								
+				<div class="col-md-2">
+	  				<button type="button" class="btn btn-success" style="align:right;" id="btnOnChangeLogEntry">+</button>
+	  			</div>	  			
+			</div>
+			<div class="row">
+				<table class="table" id="tableChangeLog">
+	    			<thead>
+	      				<tr>
+	        				<th class="th-sm">Pos</th>
+	        				<th class="th-sm">Visibility</th>  
+	        				<th class="th-sm">Type</th>
+	        				<th>Description</th>
+	        				<th class="th-sm">Impact</th>
+	        				<th class="th-sm">Defects</th>
+	        				<th class="th-sm">SVN Commit</th>        				
+	        				<th class="th-sm">Test</th>
+	        				<th class="th-sm">DEL</th>
+	      				</tr>
+	    			</thead>
+	    			<tbody>
+	    				{% if changelog!=None %}
+			    			{% for key in changelog %}
+			    			<tr>
+			    				<td>{{ key }}</td>
+			    				<td><select class="form-control">
+			    					<option value='hidden' {% if changelog[key].visibility=='hidden' %}selected{% endif %}>hidden</option>
+		        					<option value='internal' {% if changelog[key].visibility=='internal' %}selected{% endif %}>internal</option>
+		        					<option value='external' {% if changelog[key].visibility=='external' %}selected{% endif %}>external</option>
+		        							{{ changelog[key].visibility }}</select></td>
+			    				<td><select class="form-control">
+			    					<option value='Bugfix' {% if changelog[key].changetype=='Bugfix' %}selected{% endif %}>Bugfix</option>
+		        					<option value='Feature' {% if changelog[key].changetype=='Feature' %}selected{% endif %}>Feature</option>
+		        					<option value='Refactoring' {% if changelog[key].changetype=='Refactoring' %}selected{% endif %}>Refactoring</option>
+		        							{{ changelog[key].visibility }}</select></td>
+			    				<td><textarea class="form-control" rows="2" >{{ changelog[key].description }}</textarea></td>
+			    				<td><input type="range" min="0" max="100" value="{{ changelog[key].impact }}"/></td>
+			    				<td><input type="text" value="{{ changelog[key].defects }}"></input></td>
+			    				<td><input type="text" value="{{ changelog[key].svncommit }}"></input></td>
+			    				<td><input type="text" value="{{ changelog[key].test }}"></input></td>
+			    				<td><button type="button" class="btn btn-danger">X</button></td>
+			    			</tr>
+			    			{% endfor %}
+		    			{% endif %}
+	    			</tbody>
+	  			</table>
+	  		</div>				
+		</div>
+		{% if team!=None %}
+		<div class="container" id="team">
+			<div class="row" style="background:lightblue;">		
+				<h4>Team</h4>
+			</div>
+			<table class="table table-striped table-bordered table-lg" cellspacing="0" width="100%">
+			
+				<thead>
+					<tr>
+						<th>Name</th>					
+						<th>Role</th>
+						<th>Send to</th>
+					</tr>					
+				</thead>
+				<tbody>
+				{% for member in team %}
+					<tr>
+			    		<td>{{ member.Person.personname }}</td>
+			    		<td>{{ member.Team.role }}</td>
+			    		<td><button class="button">SEND</button></td>
+			    	<tr>	
+				{% endfor %}
+				</tbody>				
+		  	</table>
+  		</div>
+  		{% endif %}
+		<div class="container" id="release">
+			<div class="row" style="background:lightblue;">		
+				<h4>Release</h4>
+			</div>
+			<div class="radio">		
+				<div class="row">
+					<div class="col-md-2">					
+						<label><input type="radio" name="relhandling" checked>Forward to:</label>					
+					</div>
+					<div class="col-md-5">					  				
+		  				<select class="form-control" id="sel1">
+		        			<option>project.member1@dallmeier.de</option>
+		        			<option>project.member2@dallmeier.de</option>
+		        			<option>other.person@dallmeier.de</option>
+		        		</select>
+			        </div>
+			        <div class="col-md-5">
+			        	<button type="button" class="btn .btn-lg" id="sendTo">Send</button>
+			        </div>	
+			    </div>		
+				<br>								
+				<div class="row" id="finalize">
+					<div class="col-md-2">
+						<label><input type="radio" name="relhandling">Release:</label>
+					</div>
+					<div class="col-md-5">		
+						<div class="form-group">  			
+	  						<select class="form-control" id="sel1">
+	    						<option>Release for Test</option>
+	    						<option>Release for Internal Use</option>
+	    						<option>Release for Customer</option>    					
+	  						</select>
+						</div> 					
+					</div>  				
+					<div class="col-md-5">
+	  					<button type="button" class="btn .btn-lg .btn-alert" id="Finalize">Finalize</button>
+	  				</div>
+		  		</div>
+		  		<div class="row" id="versionuse">
+					<div class="col-md-8">
+						<label><input type="checkbox" value="" name="pv1">Mandatory for appliances</label><br>
+						<label><input type="checkbox" value="" name="pv2">Mandatory for new appliances in production</label><br>
+						<label><input type="checkbox" value="" name="pv3">Mandatory for all appliances in service with version x.y.z</label><br>
+						<label><input type="checkbox" value="" name="pv4">Update for Customers with special needs and requirements</label><br>
+					</div>
+		  		</div>
+		  	</div>
+  		</div>
+	</div>
+{% endblock %}

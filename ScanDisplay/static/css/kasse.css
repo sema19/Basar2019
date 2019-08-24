@@ -1,0 +1,43 @@
+
+h1 
+{
+	background-color: #8888FF;
+	padding: 10px;
+	width:100%;
+}
+
+#eingabeId {
+	float:left;
+	width: 100%;
+	font-family: "Arial";
+	font-size: 50px;
+	height:60px;
+	background-color: #E0E0FF;
+}
+
+#sum {		
+	font-family: "Arial";
+	font-size: 40px;
+	background-color: lime;	
+	height: 70px;	
+}
+
+#sumtxt {
+	float: left;
+}
+
+#sumId {
+	float: right;	
+}
+
+#message {
+	width:100%;
+	height:50px;
+}
+
+#article {
+	width:100%;
+}
+
+
+

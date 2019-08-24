@@ -1,0 +1,60 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}New Software Version{% endblock %}
+
+{% block header %}
+	{{ super() }}
+	<!-- <link rel="shortcut icon" href="{{ url_for('static', filename='img/favico.png') }}"></link> -->
+	<!-- <style type="text/css">
+		{% include "../static/css/bootstrap-treeview.min.css" %}		
+	</style> -->
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}            
+    <script charset="utf-8"></script>
+
+{% endblock %}
+
+{% block styles %}
+	{{ super() }}	
+{% endblock %}
+
+{% block navbar %}
+	{{ super() }}
+	<nav class="navbar navbar-inverse navbar-static-top">
+		<div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Dallmeier Software Products</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="#">Page 1</a></li>
+      <li><a href="#">Page 2</a></li>
+      <li><a href="#">Page 3</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#"><span class="glyphicon glyphicon-user"></span> User</a></li>
+      <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+    </ul>
+  </div>
+</nav>
+{% endblock %}
+
+
+{% block content %}
+	{{ super() }}	
+	<div>
+		<div class="container" id="softwareselection">
+			<div class="row">		
+				<h3>Software Products</h3>
+			</div>		
+			<div>
+			{% for product in products %}
+			<ul>
+				<li><a href="{{ request.url+'\?product='+product.productname  }}">{{ product.productname }}</a></li>				
+			</ul>
+			{% endfor %}
+			</div>
+		</div>		
+	</div>
+{% endblock %}

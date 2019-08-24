@@ -1,0 +1,708 @@
+openapi: 3.0.2
+info:
+  title: Basar System
+  version: '0.1'
+servers:    
+    - url: http://localhost:8222/
+      description: secure development server
+paths:
+  # ==================================================
+  #
+  #   PATH: cart
+  ##
+  
+  # -------------------------------------------------
+  /cart:
+    # -----------------------------------------
+    get:
+        tags: [cart]
+        operationId: controllers.cart_ctrl.get
+        summary: get all entries
+        parameters:
+          - $ref: '#/components/parameters/limit'          
+        responses:
+          200:
+            $ref: '#/components/responses/cart_list'            
+        security:
+          - basic: []
+    # -----------------------------------------
+    post:
+        tags: [cart]
+        operationId: controllers.cart_ctrl.post
+        summary: create new entry
+        requestBody:
+          content:
+            application/json:
+              schema:
+                x-body-name: odata
+                $ref: '#/components/schemas/Cart'
+        responses:
+          201:
+            $ref: '#/components/responses/cart_object'
+        security:
+          - basic: []
+  # -------------------------------------------
+  /cart/{oid}:
+    # -----------------------------------------
+    get:
+        tags: [cart]
+        operationId: controllers.cart_ctrl.get_id
+        summary: get single item
+        parameters:
+          - $ref: '#/components/parameters/item_id'
+        responses:
+          200:
+            description: successfully returned item
+        security:
+          - basic: []
+    # -----------------------------------------
+    put:
+        tags: [cart]
+        operationId: controllers.cart_ctrl.put
+        summary: modify single item
+        parameters:
+          - $ref: '#/components/parameters/item_id'
+        requestBody:
+          content:
+            application/json:
+              schema:
+                x-body-name: odata
+                $ref: '#/components/schemas/Cart'
+        responses:
+          200:
+            $ref: '#/components/responses/cart_object'
+        security:
+          - basic: []
+    # -----------------------------------------
+    delete:
+        tags: [cart]        
+        operationId: controllers.cart_ctrl.delete
+        summary: delete entry
+        parameters:
+          - $ref: '#/components/parameters/item_id'
+        responses:
+          204:
+            description: entry was deleted
+          404:
+            description: entry does not exist
+        security:
+          - basic: []
+            
+  # -------------------------------------------
+  /cart/open:
+    post:
+        tags: [cart]        
+        operationId: controllers.cart_ctrl.opencart
+        summary: delete entry
+        parameters:
+          - $ref: '#/components/parameters/paydesk_id'
+        responses:
+          200:
+            $ref: '#/components/responses/cartitems_object'            
+          404:
+             $ref: '#/components/responses/cartitems_error'            
+        security:
+          - basic: []
+  # -------------------------------------------
+  /cart/add:
+    post:
+        tags: [cart]        
+        operationId: controllers.cart_ctrl.add
+        summary: delete entry
+        parameters:
+          - $ref: '#/components/parameters/paydesk_id'
+          - $ref: '#/components/parameters/cart_id'
+          - $ref: '#/components/parameters/barcode'
+        responses:
+          200:
+            $ref: '#/components/responses/cartitems_object'
+          404:
+            description: entry does not exist
+        security:
+          - basic: []
+  # -------------------------------------------
+  /cart/close:
+    post:
+        tags: [cart]        
+        operationId: controllers.cart_ctrl.close
+        summary: delete entry
+        parameters:
+          - $ref: '#/components/parameters/paydesk_id'
+          - $ref: '#/components/parameters/cart_id'
+        responses:
+          200:
+            $ref: '#/components/responses/cartitems_object'        
+        security:
+          - basic: []
+  # -------------------------------------------
+  /cart/finalize:
+    post:
+        tags: [cart]        
+        operationId: controllers.cart_ctrl.finalize
+        summary: delete entry
+        parameters:
+          - $ref: '#/components/parameters/paydesk_id'
+          - $ref: '#/components/parameters/cart_id'
+        responses:
+          200:
+            $ref: '#/components/responses/cartitems_object'        
+        security:
+          - basic: []
+  # -------------------------------------------
+  /cart/clear:
+    post:
+        tags: [cart]        
+        operationId: controllers.cart_ctrl.clear
+        summary: delete entry
+        parameters:
+          - $ref: '#/components/parameters/paydesk_id'
+          - $ref: '#/components/parameters/cart_id'
+        responses:
+          200:
+            $ref: '#/components/responses/cartitems_object'      
+        security:
+          - basic: []
+   # -------------------------------------------
+  /cart/redo:
+    post:
+        tags: [cart]        
+        operationId: controllers.cart_ctrl.redo
+        summary: delete entry
+        parameters:
+          - $ref: '#/components/parameters/paydesk_id'
+          - $ref: '#/components/parameters/cart_id'
+        responses:
+          200:
+            $ref: '#/components/responses/cartitems_object'        
+        security:
+          - basic: []
+  
+  
+  
+  # ==================================================
+  #
+  #   PATH: paydesk
+  ##
+  
+  # -------------------------------------------------
+  /paydesk:
+    # -----------------------------------------
+    get:
+        tags: [paydesk]
+        operationId: controllers.paydesk_ctrl.get
+        summary: get all entries
+        parameters:
+          - $ref: '#/components/parameters/limit'          
+        responses:
+          200:
+            $ref: '#/components/responses/paydesk_list'            
+        security:
+          - basic: []
+          
+    # -----------------------------------------
+    post:
+        tags: [paydesk]
+        operationId: controllers.paydesk_ctrl.post
+        summary: create new entry
+        requestBody:
+          content:
+            application/json:
+              schema:
+                x-body-name: odata
+                $ref: '#/components/schemas/Paydesk'          
+        responses:
+          201:
+            $ref: '#/components/responses/paydesk_object'
+        security:
+          - basic: []
+          
+  # -------------------------------------------
+  /paydesk/{oid}:
+    # -----------------------------------------
+    get:
+        tags: [paydesk]
+        operationId: controllers.paydesk_ctrl.get_id
+        summary: get single item
+        parameters:
+          - $ref: '#/components/parameters/item_id'
+        responses:
+          200:
+            description: successfully returned item
+        security:
+          - basic: []
+    # -----------------------------------------
+    put:
+        tags: [paydesk]
+        operationId: controllers.paydesk_ctrl.put
+        summary: modify single item
+        parameters:
+          - $ref: '#/components/parameters/item_id'
+        requestBody:
+          content:
+            application/json:
+              schema:
+                x-body-name: odata
+                $ref: '#/components/schemas/Paydesk'
+        responses:
+          200:
+            $ref: '#/components/responses/paydesk_object'
+        security:
+          - basic: []
+    # -----------------------------------------
+    delete:
+        tags: [paydesk]        
+        operationId: controllers.paydesk_ctrl.delete
+        summary: delete entry
+        parameters:
+          - $ref: '#/components/parameters/item_id'
+        responses:
+          204:
+            description: entry was deleted
+          404:
+            description: entry does not exist
+        security:
+          - basic: []
+          
+  # ==================================================
+  #
+  #   PATH: article
+  ##
+  
+  # -------------------------------------------------
+  /article:
+    # -----------------------------------------
+    get:
+        tags: [article]
+        operationId: controllers.article_ctrl.get
+        summary: get all entries
+        parameters:
+          - $ref: '#/components/parameters/limit'          
+        responses:
+          200:
+            $ref: '#/components/responses/article_list'            
+        security:
+          - basic: []
+          
+    # -----------------------------------------
+    post:
+        tags: [article]
+        operationId: controllers.article_ctrl.post
+        summary: create new entry
+        requestBody:
+          content:
+            application/json:
+              schema:
+                x-body-name: odata
+                $ref: '#/components/schemas/Article'          
+        responses:
+          201:
+            $ref: '#/components/responses/article_object'
+        security:
+          - basic: []
+          
+  # -------------------------------------------
+  /article/{oid}:
+    # -----------------------------------------
+    get:
+        tags: [article]
+        operationId: controllers.article_ctrl.get_id
+        summary: get single item
+        parameters:
+          - $ref: '#/components/parameters/item_id'
+        responses:
+          200:
+            description: successfully returned item
+        security:
+          - basic: []
+    # -----------------------------------------
+    put:
+        tags: [article]
+        operationId: controllers.article_ctrl.put
+        summary: modify single item
+        parameters:
+          - $ref: '#/components/parameters/item_id'
+        requestBody:
+          content:
+            application/json:
+              schema:
+                x-body-name: odata
+                $ref: '#/components/schemas/Article'
+        responses:
+          200:
+            $ref: '#/components/responses/article_object'
+        security:
+          - basic: []
+    # -----------------------------------------
+    delete:
+        tags: [article]        
+        operationId: controllers.article_ctrl.delete
+        summary: delete entry
+        parameters:
+          - $ref: '#/components/parameters/item_id'
+        responses:
+          204:
+            description: entry was deleted
+          404:
+            description: entry does not exist
+        security:
+          - basic: []
+          
+  # ==================================================
+  #
+  #   PATH: seller
+  ##
+  
+  # -------------------------------------------------
+  /seller:
+    # -----------------------------------------
+    get:
+        tags: [seller]
+        operationId: controllers.seller_ctrl.get
+        summary: get all entries
+        parameters:
+          - $ref: '#/components/parameters/limit'          
+        responses:
+          200:
+            $ref: '#/components/responses/seller_list'            
+        security:
+          - basic: []
+          
+    # -----------------------------------------
+    post:
+        tags: [seller]
+        operationId: controllers.seller_ctrl.post
+        summary: create new entry
+        requestBody:
+          content:
+            application/json:
+              schema:
+                x-body-name: odata
+                $ref: '#/components/schemas/Seller'
+        responses:
+          201:
+            $ref: '#/components/responses/seller_object'
+        security:
+          - basic: []
+          
+  # -------------------------------------------
+  /seller/{oid}:
+    # -----------------------------------------
+    get:
+        tags: [seller]
+        operationId: controllers.seller_ctrl.get_id
+        summary: get single item
+        parameters:
+          - $ref: '#/components/parameters/item_id'
+        responses:
+          200:
+            description: successfully returned item
+        security:
+          - basic: []
+    # -----------------------------------------
+    put:
+        tags: [seller]
+        operationId: controllers.seller_ctrl.put
+        summary: modify single item
+        parameters:
+          - $ref: '#/components/parameters/item_id'
+        requestBody:
+          content:
+            application/json:
+              schema:
+                x-body-name: odata
+                $ref: '#/components/schemas/Seller'
+        responses:
+          200:
+            $ref: '#/components/responses/seller_object'
+        security:
+          - basic: []
+    # -----------------------------------------
+    delete:
+        tags: [seller]        
+        operationId: controllers.seller_ctrl.delete
+        summary: delete entry
+        parameters:
+          - $ref: '#/components/parameters/item_id'
+        responses:
+          204:
+            description: entry was deleted
+          404:
+            description: entry does not exist
+        security:
+          - basic: []
+          
+  
+
+# ====================================================            
+# ====================================================
+components:
+  securitySchemes:
+    basic:
+      type: http
+      scheme: basic
+      x-basicInfoFunc: controllers.basic_auth_ctrl.basic_auth
+  # ===================================================
+  #
+  #   PARAMETERS
+  ##
+  parameters:
+    limit:
+        name: limit
+        in: query
+        schema:
+          type: integer
+          default: 100
+    item_id:
+        name: oid
+        in: path
+        schema:
+          type: integer
+        required: true
+    barcode:
+        name: barcode
+        in: query
+        schema:
+          type: string
+        required: true
+    paydesk_id:
+        name: paydesk_id
+        in: query
+        schema:
+          type: integer
+        required: true
+    cart_id:
+        name: cart_id
+        in: query
+        schema:
+          type: integer
+        required: true
+   
+  # ===================================================
+  #
+  #   RESPONSES
+  ##
+  responses:    
+    cart_list:
+      description: list of carts
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Cart'
+    cart_object:
+      description: single product release object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Cart'   
+    paydesk_list:
+      description: list of paydesks
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Paydesk'
+    paydesk_object:
+      description: single paydesk object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Paydesk'
+    article_list:
+      description: list of articles
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Article'
+    article_object:
+      description: single article object
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Article'
+    seller_list:
+      description: list of Sellers
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Seller'
+    seller_object:
+      description: single seller
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Seller'
+    cartitems_object:
+       description: cart and items
+       content:
+          application/json:
+            schema:
+               type: array
+               items:
+                  - $ref: '#components/schemas/Msg'
+                  - $ref: '#components/schemas/Cart'
+                  - $ref: '#components/schemas/Article'
+    cartitems_error:
+       description: cart and items
+       content:
+          application/json:
+            schema:
+               $ref: '#components/schemas/Msg'        
+     
+    
+  # ===================================================
+  #
+  #   Schemas
+  ##
+  schemas:
+    Cart:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: unique id
+          readOnly: true
+        status:
+          type: string
+          description: status
+        soldtime:
+          type: string
+          description: soldtime
+    Paydesk:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: unique id
+          readOnly: true
+        name:
+          type: string
+          description: name
+        created:
+          type: string
+          description: created datetime
+        updated:
+          type: string
+          description: datetime
+        syncIp:
+          type: string
+          description: syncIp
+        syncPort:
+          type: integer
+          description: syncPort
+        remote:
+          type: boolean
+          description: remote
+        lastSyncReqReceived:
+          type: string
+          description: lastSyncReqReceived
+        lastSyncIdx:
+          type: integer
+          description: lastSyncIdx
+        itemsSynced:
+          type: integer
+          description: itemsSynced
+        lastFailedSyncReq:
+          type: string
+          description: lastFailedSyncReq
+        lastFailedSyncCount:
+          type: integer
+          description: lastFailedSyncCount
+    Article:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: unique id
+          readOnly: true
+        seller_id:
+          type: integer
+          description: seller_id
+        number:
+          type: integer
+          description: number
+        barcode:
+          type: string
+          description: barcode
+        text:
+          type: string
+          description: text
+        size:
+          type: string
+          description: size
+        price:
+          type: string
+          description: price
+        created:
+          type: string
+          description: created
+        modified:
+          type: string
+          description: modified
+        sold:
+           type: boolean
+           description: sold flag
+        paydesk_id:
+           type: integer
+           description: paydesk_id
+        cart_id:
+           type: integer
+           description: cart_id
+        scantime:
+           type: string
+           description: scantime
+        cartstate:
+           type: integer
+           description: status
+        comment:
+           type: string
+           description: comment                   
+    Seller:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: unique id
+          readOnly: true
+        number:
+          type: string
+          description: number
+        code:
+          type: string
+          description: code
+        firstname:
+          type: string
+          description: firstname
+        lastname:
+          type: string
+          description: lastname
+        phone:
+          type: string
+          description: phone
+        created:
+          type: string
+          description: created
+        email:
+          type: string
+          description: email   
+    Msg:     
+      type: object
+      properties:
+        msgtype:
+          type: string
+          description: ERROR, INFO                    
+        msgid:
+          type: string
+          description: ERROR, INFO                    
+        text:
+          type: string
+          description: message text
+        info:
+          type: string
+          description: info text
